@@ -131,6 +131,13 @@ export class TodoItemView {
         if (editInput) {
             editInput.focus();
             editInput.select();
+
+            editInput.addEventListener('keypress', (event) => {
+                if (event.key == 'Enter') {
+                    event.preventDefault();
+                    this.#handleSave();
+                }
+            });
         }
     }
 
