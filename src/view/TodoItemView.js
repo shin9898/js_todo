@@ -22,8 +22,6 @@ export class TodoItemView {
         const li = document.createElement('li');
         li.className = 'list-group-item d-flex justify-content-between align-items-center';
         li.dataset.todoId = this.todoItem.id;
-
-        // innerHTML を直接設定（this.elementを使わない）
         li.innerHTML = this.#createViewingHTML();
 
         return li;
@@ -110,9 +108,6 @@ export class TodoItemView {
      * チェックボックス切り替え処理
      */
     #handleToggle() {
-        console.log('🔵 TodoItemView: handleToggle呼び出し', this.todoItem.id);
-        console.log('🔵 TodoItemView: element確認', this.element, this.element.parentElement);
-
         const toggleEvent = new CustomEvent('todo:toggle', {
             detail: {
                 id: this.todoItem.id,
@@ -123,7 +118,6 @@ export class TodoItemView {
         });
 
         this.element.dispatchEvent(toggleEvent);
-        console.log('🔵 TodoItemView: イベント発火完了', toggleEvent.detail);
     }
 
     /**
@@ -163,8 +157,6 @@ export class TodoItemView {
         const editInput = this.element.querySelector('[data-action="edit-input"]');
         const newText = editInput.value.trim();
 
-        console.log('🔵 編集保存: 取得したテキスト', newText, typeof newText);
-
         if (newText) {
             const updateEvent = new CustomEvent('todo:update', {
                 detail: {
@@ -174,7 +166,6 @@ export class TodoItemView {
                 bubbles: true,
                 cancelable: true
             });
-            console.log('🔵 編集保存: イベント詳細', updateEvent.detail);
 
             this.element.dispatchEvent(updateEvent);
 

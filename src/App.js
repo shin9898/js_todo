@@ -8,11 +8,8 @@ import { TodoListView } from './view/TodoListView.js';
  */
 export class App {
     constructor() {
-        console.log('🏗️ App初期化開始...');
-
         // Model初期化
         this.todoListModel = new TodoListModel();
-        console.log('✅ TodoListModel初期化完了');
 
         // DOM要素取得
         this.formElement = document.querySelector('.input-group')?.parentElement;
@@ -22,22 +19,16 @@ export class App {
         if (!this.formElement || !this.listElement || !this.counterElement) {
             throw new Error('必要なDOM要素が見つかりません');
         }
-        console.log('✅ DOM要素取得完了');
 
-        // View初期化（小文字に修正）
+        // View初期化
         this.todoFormView = new TodoFormView(this.formElement);
         this.todoListView = new TodoListView(this.listElement, this.counterElement);
-        console.log('✅ View初期化完了');
 
         // イベント連携
         this.#bindEvents();
-        console.log('✅ イベント連携設定完了'); // セミコロン追加
 
         // 初期表示
         this.#render();
-        console.log('✅ 初期表示完了');
-
-        console.log('🚀 Todoアプリケーションが初期化されました');
     }
 
     /**
@@ -51,7 +42,6 @@ export class App {
 
         // 1. TodoFormView → App → TodoListModel（新規追加）
         this.formElement.addEventListener('todo:add', (event) => {
-            console.log('🟢 App: ADD イベント受信', event.detail);
             this.#handleAddTodo(event.detail.text);
         });
 
@@ -60,7 +50,6 @@ export class App {
             if (isToggleProcessing) return;
             isToggleProcessing = true;
 
-            console.log('🟢 App: TOGGLE イベント受信', event.detail);
             this.#handleToggleTodo(event.detail.id, event.detail.completed);
 
             setTimeout(() => { isToggleProcessing = false; }, 50);
@@ -70,7 +59,6 @@ export class App {
             if (isUpdateProcessing) return;
             isUpdateProcessing = true;
 
-            console.log('🟢 App: UPDATE イベント受信', event.detail);
             this.#handleUpdateTodo(event.detail.id, event.detail.text);
 
             setTimeout(() => { isUpdateProcessing = false; }, 50);
@@ -80,7 +68,6 @@ export class App {
             if (isDeleteProcessing) return;
             isDeleteProcessing = true;
 
-            console.log('🟢 App: DELETE イベント受信', event.detail);
             this.#handleDeleteTodo(event.detail.id);
 
             setTimeout(() => { isDeleteProcessing = false; }, 50);
@@ -88,20 +75,7 @@ export class App {
 
         // 3. TodoListModel → App → TodoListView（データ変更通知）
         this.todoListModel.on('list:changed', () => {
-            console.log('🟢 App: LIST CHANGED');
             this.#render();
-        });
-
-        this.todoListModel.on('item:added', (item) => {
-            console.log('📝 新しいTodoが追加されました:', item.text);
-        });
-
-        this.todoListModel.on('item:deleted', (id) => {
-            console.log('🗑️ Todoが削除されました ID:', id);
-        });
-
-        this.todoListModel.on('item:updated', (item) => {
-            console.log('✏️ Todoが更新されました:', item.text);
         });
     }
 
@@ -110,7 +84,7 @@ export class App {
      */
     #render() {
         const todoItems = this.todoListModel.getAllItems();
-        this.todoListView.render(todoItems); // 小文字に修正
+        this.todoListView.render(todoItems);
     }
 
     /**
@@ -120,9 +94,7 @@ export class App {
     #handleAddTodo(text) {
         try {
             const addedItem = this.todoListModel.addItem(text);
-            console.log('➕ Todo追加成功:', addedItem.text);
         } catch (error) {
-            console.error('❌ Todo追加失敗:', error.message);
             alert(error.message);
         }
     }
@@ -133,13 +105,7 @@ export class App {
      * @param {boolean} completed - 新しい完了状態
      */
     #handleToggleTodo(id, completed) {
-        console.log('🟢 App: handleToggleTodo開始', { id, completed }); // デバッグ追加
         const success = this.todoListModel.updateItem(id, { completed });
-        if (success) {
-            console.log(`🔄 Todo切り替え成功 ID:${id} → ${completed ? '完了' : '未完了'}`);
-        } else {
-            console.error('❌ Todo切り替え失敗 ID:', id);
-        }
     }
 
     /**
@@ -150,13 +116,7 @@ export class App {
     #handleUpdateTodo(id, text) {
         try {
             const success = this.todoListModel.updateItem(id, { text });
-            if (success) {
-                console.log(`✏️ Todo更新成功 ID:${id} → "${text}"`);
-            } else {
-                console.error('❌ Todo更新失敗 ID:', id);
-            }
         } catch (error) {
-            console.error('❌ Todo更新エラー:', error.message);
             alert(error.message);
         }
     }
@@ -167,10 +127,5 @@ export class App {
      */
     #handleDeleteTodo(id) {
         const success = this.todoListModel.deleteItem(id);
-        if (success) {
-            console.log(`🗑️ Todo削除成功 ID:${id}`);
-        } else {
-            console.error('❌ Todo削除失敗 ID:', id);
-        }
     }
 }

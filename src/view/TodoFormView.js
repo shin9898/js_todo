@@ -11,10 +11,6 @@ export class TodoFormView {
         this.inputElement = formElement.querySelector('#todoInput');
         this.addButton = formElement.querySelector('#addBtn');
 
-        // デバッグ出力
-        console.log('inputElement:', this.inputElement);
-        console.log('addButton:', this.addButton);
-
         if (!this.inputElement || !this.addButton) {
             throw new Error('Required form elements not found');
         }

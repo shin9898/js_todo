@@ -87,24 +87,17 @@ export class TodoListView {
      * イベントリスナーを設定
      */
     #bindEvents() {
-        console.log('🔵 TodoListView: bindEvents設定開始', this.listElement);
-
         this.listElement.addEventListener('todo:toggle', (event) => {
-            console.log('🔵 TodoListView: toggle受信', event.detail, event.target);
             this.#forwardEvent('todo:toggle', event.detail);
         });
 
         this.listElement.addEventListener('todo:delete', (event) => {
-            console.log('🔵 TodoListView: delete受信', event.detail, event.target);
             this.#forwardEvent('todo:delete', event.detail);
         });
 
         this.listElement.addEventListener('todo:update', (event) => {
-            console.log('🔵 TodoListView: update受信', event.detail, event.target);
             this.#forwardEvent('todo:update', event.detail);
         });
-
-        console.log('🔵 TodoListView: bindEvents設定完了');
     }
 
     /**
@@ -118,7 +111,6 @@ export class TodoListView {
             bubbles: true
         });
         document.dispatchEvent(forwardedEvent);
-        console.log('🔵 TodoListView: forwardEvent完了');
     }
 
 }
