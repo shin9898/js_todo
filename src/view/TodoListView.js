@@ -1,4 +1,5 @@
 import { TodoItemView } from './TodoItemView.js';
+import { EventUtils } from '../utils/EventUtils.js';
 
 /**
  * Todo一覧の表示を管理するクラス
@@ -106,10 +107,7 @@ export class TodoListView {
      * @param {Object} detail - イベントの詳細データ
      */
     #forwardEvent(eventName, detail) {
-        const forwardedEvent = new CustomEvent(eventName, {
-            detail,
-            bubbles: true
-        });
+        const forwardedEvent = EventUtils.createCustomEvent(eventName, detail);
         document.dispatchEvent(forwardedEvent);
     }
 

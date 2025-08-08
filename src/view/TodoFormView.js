@@ -1,3 +1,5 @@
+import { EventUtils } from "../utils/EventUtils.js";
+
 /**
  * Todo入力フォームを管理するクラス
  */
@@ -42,9 +44,7 @@ export class TodoFormView {
         const text = this.inputElement.value.trim();
 
         if (text) {
-            const addEvent = new CustomEvent('todo:add', {
-                detail: { text }
-            });
+            const addEvent = EventUtils.createAddEvent(text);
             this.formElement.dispatchEvent(addEvent);
             this.#clearInput();
         } else {

@@ -1,3 +1,5 @@
+import { EventUtils } from "../utils/EventUtils.js";
+
 /**
  * 個別のTodoアイテムを表示・操作するクラス
  */
@@ -108,15 +110,10 @@ export class TodoItemView {
      * チェックボックス切り替え処理
      */
     #handleToggle() {
-        const toggleEvent = new CustomEvent('todo:toggle', {
-            detail: {
-                id: this.todoItem.id,
-                completed: !this.todoItem.completed
-            },
-            bubbles: true,
-            cancelable: true
-        });
-
+        const toggleEvent = EventUtils.createToggleEvent(
+            this.todoItem.id,
+            !this.todoItem.completed
+        );
         this.element.dispatchEvent(toggleEvent);
     }
 
@@ -148,11 +145,7 @@ export class TodoItemView {
         const confirmed = confirm('本当に削除してもよろしいですか？');
 
         if (confirmed) {
-            const deleteEvent = new CustomEvent('todo:delete', {
-                detail: { id: this.todoItem.id },
-                bubbles: true,
-                cancelable: true
-            });
+            const deleteEvent = EventUtils.createDeleteEvent(this.todoItem.id);
             this.element.dispatchEvent(deleteEvent);
         }
     }
@@ -165,17 +158,8 @@ export class TodoItemView {
         const newText = editInput.value.trim();
 
         if (newText) {
-            const updateEvent = new CustomEvent('todo:update', {
-                detail: {
-                    id: this.todoItem.id,
-                    text: newText
-                },
-                bubbles: true,
-                cancelable: true
-            });
-
+            const updateEvent = EventUtils.createUpdateEvent(this.todoItem.id, newText);
             this.element.dispatchEvent(updateEvent);
-
             this.isEditing = false;
             this.updateElement();
         } else {
